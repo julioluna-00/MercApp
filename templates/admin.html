@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Administracion - MercaApp{% endblock %}
+{% block body_class %}admin-body{% endblock %}
+
+{% block content %}
+<div class="admin-shell">
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="admin-header-main">
+                <a href="{{ url_for('tienda') }}" class="header-back-btn">Volver</a>
+                <div>
+                    <span class="eyebrow">Panel de administracion</span>
+                    <h1 class="admin-title">Panel de administrador</h1>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <a href="{{ url_for('tienda') }}" class="ghost-link">Catalogo</a>
+                <a href="{{ url_for('logout') }}" class="ghost-link">Cerrar sesion</a>
+            </div>
+        </header>
+
+        <div class="admin-tabs">
+            <a href="{{ url_for('admin', tab='products') }}" class="admin-tab-link{% if active_tab == 'products' %} activo{% endif %}">Productos</a>
+            <a href="{{ url_for('admin', tab='accounting') }}" class="admin-tab-link{% if active_tab == 'accounting' %} activo{% endif %}">Contabilidad</a>
+        </div>
+
+        <section class="admin-section{% if active_tab != 'products' %} oculto{% endif %}">
+            <div class="admin-form-card">
+                <div class="admin-card-head">
+                    <h2>{{ "Editar producto" if edit_product else "Nuevo producto" }}</h2>
+                    <a href="{{ url_for('admin', tab='products') }}" class="ghost-link small">Limpiar formulario</a>
+                </div>
+
+                <form method="POST" action="{{ url_for('admin_guardar_producto') }}" class="admin-form">
+                    <input type="hidden" name="product_id" value="{{ edit_product.id if edit_product else '' }}">
+
+                    <div class="admin-grid">
+                        <div>
+                            <label class="field-label" for="nombre">Nombre del producto</label>
+                            <input id="nombre" type="text" name="nombre" value="{{ edit_product.nombre if edit_product else '' }}" placeholder="Ej: Arroz Diana" required>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="precio">Precio</label>
+                            <input id="precio" type="number" name="precio" min="0" value="{{ edit_product.precio if edit_product else '' }}" placeholder="Ej: 3500" required>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="imagen">Ruta de imagen</label>
+                            <input id="imagen" type="text" name="imagen" value="{{ edit_product.imagen if edit_product else '' }}" placeholder="img/arroz.jpg" required>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="stock">Cantidad en stock</label>
+                            <input id="stock" type="number" name="stock" min="0" value="{{ edit_product.stock if edit_product else 0 }}" placeholder="0" required>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="categoria">Categoria</label>
+                            <select id="categoria" name="categoria" required>
+                                {% for categoria in categories %}
+                                <option value="{{ categoria.id }}" {% if edit_product and edit_product.categoria == categoria.id %}selected{% endif %}>
+                                    {{ categoria.label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <label class="admin-checkbox">
+                            <input type="checkbox" name="oferta" {% if edit_product and edit_product.oferta %}checked{% endif %}>
+                            <span>Marcar como oferta</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="field-label" for="descripcion">Descripcion</label>
+                        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Descripcion del producto">{{ edit_product.descripcion if edit_product else '' }}</textarea>
+                    </div>
+
+                    <div class="admin-form-actions">
+                        <button type="submit" class="admin-primary-btn">Guardar producto</button>
+                        <a href="{{ url_for('admin', tab='products') }}" class="ghost-link">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="admin-list-card">
+                <div class="admin-card-head">
+                    <h2>Productos ({{ products|length }})</h2>
+                    <div class="admin-card-actions">
+                        <form
+                            method="POST"
+                            action="{{ url_for('admin_restaurar_productos') }}"
+                            onsubmit="return confirm('Se restaurara el catalogo original y se ocultaran los productos activos actuales. Deseas continuar?');"
+                        >
+                            <button type="submit" class="ghost-link small">Restaurar catalogo</button>
+                        </form>
+                        <a href="{{ url_for('admin', tab='products') }}" class="admin-primary-btn inline">Agregar nuevo</a>
+                    </div>
+                </div>
+
+                <div class="admin-product-list">
+                    {% for product in products %}
+                    <article class="admin-product-item">
+                        <div class="admin-product-media">
+                            <img src="{{ url_for('static', filename=product.imagen) }}" alt="{{ product.nombre }}">
+                        </div>
+
+                        <div class="admin-product-content">
+                            <h3>{{ product.nombre }}</h3>
+                            <p>{{ product.descripcion or "Sin descripcion" }}</p>
+                            <div class="admin-product-meta">
+                                <span>{{ product.precio_mostrado }}</span>
+                                <span>Stock: {{ product.stock }}</span>
+                                <span>{{ product.categoria|capitalize }}</span>
+                                {% if product.oferta %}
+                                <span class="offer-chip">Oferta</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="admin-item-actions">
+                            <a href="{{ url_for('admin', tab='products', edit=product.id) }}" class="ghost-link small">Editar</a>
+                            <form
+                                method="POST"
+                                action="{{ url_for('admin_eliminar_producto', product_id=product.id) }}"
+                                onsubmit="return confirm('Seguro que quieres eliminar este producto?');"
+                            >
+                                <button type="submit" class="danger-link">Eliminar</button>
+                            </form>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                {% if not products %}
+                <div class="empty-admin-state restore-state">
+                    <strong>El catalogo esta vacio.</strong>
+                    <p>Puedes restaurar todos los productos originales con el boton de arriba.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="admin-section{% if active_tab != 'accounting' %} oculto{% endif %}">
+            <div class="admin-stats-grid">
+                <article class="admin-stat-card success">
+                    <p>Ventas totales</p>
+                    <strong>${{ "{:,.0f}".format(resumen.total_ventas).replace(",", ".") }}</strong>
+                </article>
+                <article class="admin-stat-card danger">
+                    <p>Inversiones</p>
+                    <strong>${{ "{:,.0f}".format(resumen.total_inversiones).replace(",", ".") }}</strong>
+                </article>
+                <article class="admin-stat-card info">
+                    <p>Ganancias</p>
+                    <strong>${{ "{:,.0f}".format(resumen.ganancias).replace(",", ".") }}</strong>
+                </article>
+            </div>
+
+            <div class="admin-form-card">
+                <div class="admin-card-head">
+                    <h2>Registrar transaccion</h2>
+                </div>
+
+                <form method="POST" action="{{ url_for('admin_agregar_transaccion') }}" class="admin-form">
+                    <div class="admin-grid transaction-grid">
+                        <div>
+                            <label class="field-label" for="transaction-type">Tipo</label>
+                            <select id="transaction-type" name="type" required>
+                                <option value="sale">Venta</option>
+                                <option value="investment">Inversion</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="transaction-amount">Monto</label>
+                            <input id="transaction-amount" type="number" min="0" name="amount" placeholder="15000" required>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="transaction-description">Descripcion</label>
+                            <input id="transaction-description" type="text" name="description" placeholder="Concepto" required>
+                        </div>
+                    </div>
+
+                    <div class="admin-form-actions">
+                        <button type="submit" class="admin-primary-btn">Agregar transaccion</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="admin-list-card">
+                <div class="admin-card-head">
+                    <h2>Historial de transacciones</h2>
+                </div>
+
+                <div class="admin-transaction-list">
+                    {% if transactions %}
+                        {% for transaction in transactions %}
+                        <article class="admin-transaction-item {{ 'sale' if transaction.type == 'sale' else 'investment' }}">
+                            <div>
+                                <h3>{{ transaction.description }}</h3>
+                                <p>{{ transaction.date }}</p>
+                            </div>
+                            <strong>{{ '+' if transaction.type == 'sale' else '-' }}${{ "{:,.0f}".format(transaction.amount).replace(",", ".") }}</strong>
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                    <div class="empty-admin-state">
+                        <strong>No hay transacciones registradas.</strong>
+                        <p>Agrega ventas o inversiones para ver el historial aqui.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="admin-list-card">
+                <div class="admin-card-head">
+                    <h2>Pedidos recientes</h2>
+                </div>
+
+                <div class="admin-transaction-list">
+                    {% if recent_orders %}
+                        {% for order in recent_orders %}
+                        <article class="admin-transaction-item sale">
+                            <div>
+                                <h3>Pedido #{{ order.id }} - {{ order.full_name }}</h3>
+                                <p>{{ order.date }} | {{ "Domicilio" if order.delivery_type == "delivery" else "Recoger en tienda" }} | {{ order.source_label }}</p>
+                            </div>
+                            <strong>{{ order.total_mostrado }}</strong>
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                    <div class="empty-admin-state">
+                        <strong>No hay pedidos registrados.</strong>
+                        <p>Cuando un cliente confirme su compra, el pedido aparecera aqui.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

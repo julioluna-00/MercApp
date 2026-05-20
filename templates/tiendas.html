@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Tiendas - MercaApp{% endblock %}
+{% block body_class %}tiendas-body{% endblock %}
+
+{% block content %}
+<div class="page-shell">
+    <div class="page-container">
+        <header class="page-topbar">
+            <div class="brand-badge">MercApp</div>
+            <div class="topbar-actions">
+                {% if is_admin %}
+                <a href="{{ url_for('admin') }}" class="ghost-link">Panel admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="ghost-link">Cerrar sesion</a>
+            </div>
+        </header>
+
+        <section class="stores-hero">
+            <span class="eyebrow">Selecciona tu tienda</span>
+            <h1 class="section-heading">Tiendas disponibles</h1>
+            <p class="section-description">Escoge donde quieres comprar hoy y entra al catalogo en segundos.</p>
+        </section>
+
+        <div class="stores-grid">
+            {% for tienda in tiendas %}
+            <article class="store-card">
+                <div class="store-media">
+                    <img src="{{ url_for('static', filename=tienda.imagen) }}" alt="{{ tienda.nombre }}">
+                </div>
+                <h3>{{ tienda.nombre }}</h3>
+                <p>{{ tienda.descripcion }}</p>
+                <a href="{{ url_for(tienda.ruta) }}" class="store-button">Entrar</a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

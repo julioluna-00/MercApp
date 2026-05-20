@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Registro - MercaApp{% endblock %}
+{% block body_class %}login-body{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+    <div class="auth-card auth-card-wide">
+        <div class="brand-badge">MercApp</div>
+        <h1 class="auth-title">Crear cuenta</h1>
+        <p class="auth-subtitle">Registrate para empezar a comprar y guardar tu perfil.</p>
+
+        {% if error %}
+        <p class="form-alert">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+            <div class="auth-grid">
+                <div>
+                    <label class="field-label" for="first-name">Nombre</label>
+                    <input id="first-name" type="text" name="first_name" placeholder="Nombre" value="{{ values.first_name }}" required>
+                </div>
+                <div>
+                    <label class="field-label" for="last-name">Apellidos</label>
+                    <input id="last-name" type="text" name="last_name" placeholder="Apellidos" value="{{ values.last_name }}" required>
+                </div>
+            </div>
+
+            <label class="field-label" for="register-username">Usuario</label>
+            <input id="register-username" type="text" name="username" placeholder="Usuario" value="{{ values.username }}" required>
+
+            <label class="field-label" for="register-phone">Telefono</label>
+            <input id="register-phone" type="tel" name="phone" placeholder="Numero de telefono" value="{{ values.phone }}" required>
+
+            <label class="field-label" for="register-address">Direccion</label>
+            <input id="register-address" type="text" name="address" placeholder="Direccion completa" value="{{ values.address }}" required>
+
+            <label class="field-label" for="register-password">Contrasena</label>
+            <input id="register-password" type="password" name="password" placeholder="Contrasena" required>
+
+            <button type="submit">Registrarse</button>
+        </form>
+
+        <p class="auth-switch">
+            Ya tienes cuenta?
+            <a href="{{ url_for('login') }}">Inicia sesion</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Login - MercaApp{% endblock %}
+{% block body_class %}login-body{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+    <div class="auth-card">
+        <div class="brand-badge">MercApp</div>
+        <h1 class="auth-title">Iniciar sesion</h1>
+        <p class="auth-subtitle">Ingresa a tu cuenta para comprar rapido y facil.</p>
+
+        {% if error %}
+        <p class="form-alert">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+            <label class="field-label" for="login-username">Usuario</label>
+            <input id="login-username" type="text" name="username" placeholder="Usuario" required>
+
+            <label class="field-label" for="login-password">Contrasena</label>
+            <input id="login-password" type="password" name="password" placeholder="Contrasena" required>
+
+            <button type="submit">Iniciar sesion</button>
+        </form>
+
+        <p class="auth-switch">
+            No tienes cuenta?
+            <a href="{{ url_for('register') }}">Registrate</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

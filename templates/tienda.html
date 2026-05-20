@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tienda.nombre }}{% endblock %}
+{% block body_class %}catalog-body{% endblock %}
+
+{% block content %}
+<div class="catalog-shell">
+    <header class="catalog-header">
+        <div class="catalog-header-inner">
+            <div class="catalog-brand-group">
+                <a href="{{ url_for('tiendas') }}" class="header-back-btn">Volver</a>
+                <div class="store-brand-card">
+                    <span class="store-brand-label">MercApp</span>
+                    <strong>{{ tienda.nombre }}</strong>
+                </div>
+            </div>
+
+            <nav class="menu">
+                {% for categoria in categorias %}
+                <button
+                    type="button"
+                    class="menu-btn{% if categoria.id == 'inicio' %} activo{% endif %}"
+                    data-categoria="{{ categoria.id }}"
+                >
+                    {{ categoria.label }}
+                </button>
+                {% endfor %}
+            </nav>
+
+            <div class="catalog-actions">
+                <div class="busqueda-wrapper">
+                    <button type="button" class="icon-button" id="toggle-busqueda" aria-label="Buscar productos">
+                        Buscar
+                    </button>
+                    <div class="busqueda-panel" id="busqueda-panel">
+                        <label class="busqueda-label" for="busqueda-producto">Buscar producto</label>
+                        <input type="search" id="busqueda-producto" placeholder="Escribe el nombre del producto">
+                    </div>
+                </div>
+
+                <div class="usuario-wrapper">
+                    <button type="button" class="icon-button" id="toggle-usuario" aria-label="Ver informacion del usuario">
+                        Perfil
+                    </button>
+                    <div class="usuario-panel" id="usuario-panel">
+                        <div class="profile-hero">
+                            <div class="profile-avatar" id="usuario-inicial">M</div>
+                            <div>
+                                <p class="usuario-label">Perfil MercApp</p>
+                                <h3 id="usuario-nombre">Cliente MercaApp</h3>
+                                <p id="usuario-handle" class="usuario-handle">@cliente</p>
+                            </div>
+                        </div>
+
+                        <div class="usuario-info-grid">
+                            <div class="profile-detail-card">
+                                <span>Correo</span>
+                                <strong id="usuario-correo">Sin correo registrado</strong>
+                            </div>
+                            <div class="profile-detail-card">
+                                <span>Telefono</span>
+                                <strong id="usuario-telefono">No registrado</strong>
+                            </div>
+                            <div class="profile-detail-card">
+                                <span>Estado</span>
+                                <strong id="usuario-estado">Activo</strong>
+                            </div>
+                            <div class="profile-detail-card">
+                                <span>Direccion</span>
+                                <strong id="usuario-direccion">Pendiente por definir</strong>
+                            </div>
+                            <div class="profile-detail-card full">
+                                <span>Ultimo ingreso</span>
+                                <strong id="usuario-acceso">Hoy</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if is_admin %}
+                <a href="{{ url_for('admin') }}" class="icon-button admin-shortcut">Admin</a>
+                {% endif %}
+
+                <button type="button" class="cart-icon" id="toggle-carrito" aria-label="Abrir carrito">
+                    Carrito
+                    <span id="contador">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-overlay">
+            <span class="hero-tag">MercApp</span>
+            <h2>Tu supermercado en linea</h2>
+            <p>Compra productos basicos desde casa con entregas rapidas y categorias faciles de explorar.</p>
+        </div>
+    </section>
+
+    <main class="catalog-content">
+        <section class="catalog-intro">
+            <span class="eyebrow">Catalogo</span>
+            <h3>Productos disponibles</h3>
+            <p>Conservamos las imagenes de tu tienda y el banner, pero con el estilo nuevo de la referencia.</p>
+        </section>
+
+        <section class="productos" id="lista-productos">
+            {% for producto in productos %}
+            <article
+                class="card"
+                data-producto="{{ producto.nombre|lower }}"
+                data-categoria="{{ producto.categoria }}"
+                data-oferta="{{ 'true' if producto.oferta else 'false' }}"
+            >
+                <div class="img-container">
+                    <img src="{{ url_for('static', filename=producto.imagen) }}" alt="{{ producto.nombre }}">
+                </div>
+
+                <div class="card-body">
+                    <div class="card-meta">
+                        <span class="card-badge">{{ "Oferta" if producto.oferta else "Disponible" }}</span>
+                        {% if producto.stock < 10 %}
+                        <span class="stock-badge">{{ producto.stock }} disponibles</span>
+                        {% endif %}
+                    </div>
+                    <h3>{{ producto.nombre }}</h3>
+                    <p class="product-description">{{ producto.descripcion }}</p>
+                    <p class="product-price">{{ producto.precio_mostrado }}</p>
+                    <button
+                        type="button"
+                        class="btn-carrito agregar-producto"
+                        data-id="{{ producto.id }}"
+                        data-nombre="{{ producto.nombre }}"
+                        data-precio="{{ producto.precio }}"
+                        data-stock="{{ producto.stock }}"
+                        data-imagen="{{ url_for('static', filename=producto.imagen) }}"
+                        {% if producto.stock == 0 %}disabled{% endif %}
+                    >
+                        {{ "Agotado" if producto.stock == 0 else "Agregar" }}
+                    </button>
+                </div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <p id="mensaje-busqueda" class="mensaje-busqueda oculto">
+            No encontramos productos con ese nombre.
+        </p>
+    </main>
+
+    <div class="accessibility-shell">
+        <button
+            type="button"
+            class="accessibility-launcher"
+            id="accessibility-toggle"
+            aria-label="Abrir panel de accesibilidad"
+            aria-expanded="false"
+            aria-controls="accessibility-panel"
+        >
+            <span class="accessibility-launcher-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M12 4.25a1.75 1.75 0 1 0 0 3.5a1.75 1.75 0 0 0 0-3.5Zm-6.75 5.6a1 1 0 0 1 1.41-.1l2.85 2.41a3 3 0 0 0 1.94.74h1.1a3 3 0 0 0 1.94-.74l2.85-2.41a1 1 0 1 1 1.3 1.52l-2.85 2.41a5 5 0 0 1-2.1 1.08l1.68 5.88a1 1 0 1 1-1.92.55l-1.13-3.95h-1.13l-1.13 3.95a1 1 0 0 1-1.92-.55l1.68-5.88a5 5 0 0 1-2.1-1.08l-2.85-2.41a1 1 0 0 1-.1-1.41Z"/>
+                </svg>
+            </span>
+        </button>
+
+        <section
+            class="accessibility-panel"
+            id="accessibility-panel"
+            aria-label="Panel de accesibilidad"
+            aria-hidden="true"
+        >
+            <header class="accessibility-header">
+                <div class="accessibility-title-group">
+                    <span class="accessibility-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M12 4.25a1.75 1.75 0 1 0 0 3.5a1.75 1.75 0 0 0 0-3.5Zm-6.75 5.6a1 1 0 0 1 1.41-.1l2.85 2.41a3 3 0 0 0 1.94.74h1.1a3 3 0 0 0 1.94-.74l2.85-2.41a1 1 0 1 1 1.3 1.52l-2.85 2.41a5 5 0 0 1-2.1 1.08l1.68 5.88a1 1 0 1 1-1.92.55l-1.13-3.95h-1.13l-1.13 3.95a1 1 0 0 1-1.92-.55l1.68-5.88a5 5 0 0 1-2.1-1.08l-2.85-2.41a1 1 0 0 1-.1-1.41Z"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <h3>Accesibilidad</h3>
+                        <p>Ajusta la experiencia visual y de lectura.</p>
+                    </div>
+                </div>
+                <button type="button" class="accessibility-close" id="accessibility-close" aria-label="Cerrar panel de accesibilidad">x</button>
+            </header>
+
+            <div class="accessibility-content">
+                <article class="accessibility-item">
+                    <div class="accessibility-item-icon accessibility-item-icon-moon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M14.5 2.6a1 1 0 0 1 .61 1.56A8.5 8.5 0 1 0 19.84 15a1 1 0 0 1 1.56.61a1.34 1.34 0 0 1-.03.46A10.5 10.5 0 1 1 13.93 2.63a1.34 1.34 0 0 1 .57-.03Z"/>
+                        </svg>
+                    </div>
+                    <div class="accessibility-item-copy">
+                        <strong>Modo oscuro</strong>
+                        <span>Cambia entre tema claro y oscuro</span>
+                    </div>
+                    <button type="button" class="switch-control" id="toggle-dark-mode" role="switch" aria-checked="false" aria-label="Activar modo oscuro">
+                        <span class="switch-thumb"></span>
+                    </button>
+                </article>
+
+                <article class="accessibility-item">
+                    <div class="accessibility-item-icon" aria-hidden="true">A</div>
+                    <div class="accessibility-item-copy">
+                        <strong>Tamano de texto</strong>
+                        <span id="accessibility-font-summary">100%</span>
+                    </div>
+                    <div class="font-size-controls" aria-label="Controles de tamano de texto">
+                        <button type="button" class="stepper-button" id="decrease-font-size" aria-label="Disminuir tamano de texto">-</button>
+                        <output id="font-size-value" for="decrease-font-size increase-font-size">100%</output>
+                        <button type="button" class="stepper-button" id="increase-font-size" aria-label="Aumentar tamano de texto">+</button>
+                    </div>
+                </article>
+
+                <article class="accessibility-item">
+                    <div class="accessibility-item-icon" aria-hidden="true">◐</div>
+                    <div class="accessibility-item-copy">
+                        <strong>Alto contraste</strong>
+                        <span>Aumenta el contraste de la interfaz</span>
+                    </div>
+                    <button type="button" class="switch-control" id="toggle-high-contrast" role="switch" aria-checked="false" aria-label="Activar alto contraste">
+                        <span class="switch-thumb"></span>
+                    </button>
+                </article>
+
+                <article class="accessibility-item">
+                    <div class="accessibility-item-icon" aria-hidden="true">✦</div>
+                    <div class="accessibility-item-copy">
+                        <strong>Reducir animaciones</strong>
+                        <span>Minimiza el movimiento en pantalla</span>
+                    </div>
+                    <button type="button" class="switch-control" id="toggle-reduced-motion" role="switch" aria-checked="false" aria-label="Reducir animaciones">
+                        <span class="switch-thumb"></span>
+                    </button>
+                </article>
+
+                <article class="accessibility-item">
+                    <div class="accessibility-item-icon accessibility-item-icon-underline" aria-hidden="true">_</div>
+                    <div class="accessibility-item-copy">
+                        <strong>Subrayar enlaces</strong>
+                        <span>Resalta los enlaces con subrayado</span>
+                    </div>
+                    <button type="button" class="switch-control" id="toggle-underlined-links" role="switch" aria-checked="false" aria-label="Subrayar enlaces">
+                        <span class="switch-thumb"></span>
+                    </button>
+                </article>
+
+                <article class="accessibility-item">
+                    <div class="accessibility-item-icon" aria-hidden="true">⌖</div>
+                    <div class="accessibility-item-copy">
+                        <strong>Cursor grande</strong>
+                        <span>Aumenta el tamano del cursor</span>
+                    </div>
+                    <button type="button" class="switch-control" id="toggle-large-cursor" role="switch" aria-checked="false" aria-label="Activar cursor grande">
+                        <span class="switch-thumb"></span>
+                    </button>
+                </article>
+            </div>
+
+            <footer class="accessibility-footer">
+                <button type="button" class="accessibility-reset" id="accessibility-reset">Restablecer valores</button>
+            </footer>
+        </section>
+    </div>
+
+    <div class="chatbot-shell">
+        <button
+            type="button"
+            class="chatbot-launcher"
+            id="chatbot-toggle"
+            aria-label="Abrir asistente virtual"
+            aria-expanded="false"
+        >
+            <span class="chatbot-avatar chatbot-avatar-large">
+                <span class="chatbot-face">
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+            <span class="chatbot-status-dot"></span>
+        </button>
+
+        <section class="chatbot-panel" id="chatbot-panel" aria-label="Asistente virtual">
+            <header class="chatbot-header">
+                <div class="chatbot-header-main">
+                    <span class="chatbot-avatar">
+                        <span class="chatbot-face">
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </span>
+                    <div>
+                        <h3>Asistente virtual</h3>
+                        <p id="chatbot-status-text">En linea</p>
+                    </div>
+                </div>
+                <div class="chatbot-header-actions">
+                    <button type="button" class="chatbot-audio-toggle" id="chatbot-audio-toggle" aria-label="Activar voz del asistente" aria-pressed="false">
+                        Audio
+                    </button>
+                    <button type="button" class="chatbot-clear" id="chatbot-clear" aria-label="Borrar chat">Borrar</button>
+                    <button type="button" class="chatbot-close" id="chatbot-close" aria-label="Cerrar chat">x</button>
+                </div>
+            </header>
+
+            <div class="chatbot-messages" id="chatbot-messages"></div>
+
+            <form class="chatbot-form" id="chatbot-form">
+                <div class="chatbot-input-row">
+                    <div class="chatbot-quick-menu">
+                        <button
+                            type="button"
+                            class="chatbot-quick-toggle"
+                            id="chatbot-quick-toggle"
+                            aria-label="Abrir opciones rapidas"
+                            aria-expanded="false"
+                            aria-controls="chatbot-quick-options"
+                        >
+                            +
+                        </button>
+                        <div class="chatbot-quick-options oculto" id="chatbot-quick-options"></div>
+                    </div>
+                    <input
+                        type="text"
+                        id="chatbot-input"
+                        placeholder="Escribe tu mensaje..."
+                        autocomplete="off"
+                    >
+                </div>
+                <button type="button" class="chatbot-mic-button" id="chatbot-mic" aria-label="Activar voz">
+                    Voz
+                </button>
+                <button type="submit" class="chatbot-send-button" id="chatbot-send" aria-label="Enviar mensaje">
+                    Enviar
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <div class="cart-backdrop" id="carrito-backdrop"></div>
+
+    <aside id="carrito" class="carrito-lateral">
+        <div class="carrito-header">
+            <div>
+                <p class="carrito-overline">Pedido actual</p>
+                <h2>Carrito MercApp</h2>
+            </div>
+            <button type="button" class="close-drawer" id="cerrar-carrito" aria-label="Cerrar carrito">x</button>
+        </div>
+
+        <div id="items-carrito" class="items-carrito"></div>
+
+        <div class="carrito-footer">
+            <div class="carrito-resumen">
+                <p id="tipo-entrega" class="tipo-entrega">Entrega en tienda</p>
+                <h3 id="total">Total: $0</h3>
+                <p id="mensaje-carrito" class="mensaje-carrito">Agrega productos para continuar con tu compra.</p>
+            </div>
+
+            <div class="carrito-acciones">
+                <button type="button" class="btn-secundario" id="pedir-domicilio">Pedir domicilio</button>
+                <button type="button" class="btn-principal" id="hacer-pedido">Hacer pedido</button>
+                <button type="button" class="btn-vaciar" id="vaciar-carrito">Vaciar carrito</button>
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tienda.js', v=asset_version('js/tienda.js')) }}"></script>
+{% endblock %}

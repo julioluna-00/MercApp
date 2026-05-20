@@ -1,0 +1,23 @@
+{"messages": [{"role": "user", "content": "Hola"}, {"role": "assistant", "content": "Hola. Estoy listo para ayudarte con productos, precios, stock, pedidos y domicilios en MercApp."}]}
+{"messages": [{"role": "user", "content": "Tienen domicilios?"}, {"role": "assistant", "content": "Si. Agrega los productos al carrito y luego confirmas el domicilio. Si quieres, te voy guiando paso a paso."}]}
+{"messages": [{"role": "user", "content": "Como pago mi pedido?"}, {"role": "assistant", "content": "Cuando confirmes el pedido, te guio con las opciones de pago disponibles para tu compra."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Arroz Diana?"}, {"role": "assistant", "content": "Arroz Diana esta en $3.500. Arroz de alta calidad para tu cocina diaria. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Arroz Diana?"}, {"role": "assistant", "content": "En este momento Arroz Diana tiene 50 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Leche Alpina?"}, {"role": "assistant", "content": "Leche Alpina esta en $4.200. Leche entera fresca lista para el desayuno. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Leche Alpina?"}, {"role": "assistant", "content": "En este momento Leche Alpina tiene 30 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Huevos x30?"}, {"role": "assistant", "content": "Huevos x30 esta en $15.000. Cubeta de 30 huevos para toda la familia. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Huevos x30?"}, {"role": "assistant", "content": "En este momento Huevos x30 tiene 15 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Aceite?"}, {"role": "assistant", "content": "Aceite esta en $9.000. Aceite vegetal de 1 litro. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Aceite?"}, {"role": "assistant", "content": "En este momento Aceite tiene 24 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Azucar?"}, {"role": "assistant", "content": "Azucar esta en $2.800. Azucar refinada ideal para bebidas y postres. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Azucar?"}, {"role": "assistant", "content": "En este momento Azucar tiene 40 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Cafe?"}, {"role": "assistant", "content": "Cafe esta en $8.500. Cafe molido con aroma intenso. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Cafe?"}, {"role": "assistant", "content": "En este momento Cafe tiene 35 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Gaseosa?"}, {"role": "assistant", "content": "Gaseosa esta en $5.000. Gaseosa familiar para compartir. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Gaseosa?"}, {"role": "assistant", "content": "En este momento Gaseosa tiene 44 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Jabon?"}, {"role": "assistant", "content": "Jabon esta en $3.200. Jabon de tocador para el cuidado diario. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Jabon?"}, {"role": "assistant", "content": "En este momento Jabon tiene 59 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Pan?"}, {"role": "assistant", "content": "Pan esta en $2.000. Pan suave para tus desayunos y onces. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Pan?"}, {"role": "assistant", "content": "En este momento Pan tiene 15 unidades disponibles."}]}
+{"messages": [{"role": "user", "content": "Cuanto vale Sal?"}, {"role": "assistant", "content": "Sal esta en $1.500. Sal de cocina para todo tipo de recetas. Si quieres, te ayudo a pedirlo."}]}
+{"messages": [{"role": "user", "content": "Hay stock de Sal?"}, {"role": "assistant", "content": "En este momento Sal tiene 53 unidades disponibles."}]}

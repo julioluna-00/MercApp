@@ -1,0 +1,102 @@
+[
+  {
+    "id": "31",
+    "nombre": "Arroz Diana",
+    "categoria": "grano",
+    "precio": "$3.500",
+    "stock": 50,
+    "oferta": false,
+    "descripcion": "Arroz de alta calidad para tu cocina diaria.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "32",
+    "nombre": "Leche Alpina",
+    "categoria": "bebidas",
+    "precio": "$4.200",
+    "stock": 30,
+    "oferta": false,
+    "descripcion": "Leche entera fresca lista para el desayuno.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "33",
+    "nombre": "Huevos x30",
+    "categoria": "grano",
+    "precio": "$15.000",
+    "stock": 15,
+    "oferta": true,
+    "descripcion": "Cubeta de 30 huevos para toda la familia.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "34",
+    "nombre": "Aceite",
+    "categoria": "grano",
+    "precio": "$9.000",
+    "stock": 24,
+    "oferta": true,
+    "descripcion": "Aceite vegetal de 1 litro.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "35",
+    "nombre": "Azucar",
+    "categoria": "grano",
+    "precio": "$2.800",
+    "stock": 40,
+    "oferta": false,
+    "descripcion": "Azucar refinada ideal para bebidas y postres.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "36",
+    "nombre": "Cafe",
+    "categoria": "grano",
+    "precio": "$8.500",
+    "stock": 35,
+    "oferta": false,
+    "descripcion": "Cafe molido con aroma intenso.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "37",
+    "nombre": "Gaseosa",
+    "categoria": "bebidas",
+    "precio": "$5.000",
+    "stock": 44,
+    "oferta": true,
+    "descripcion": "Gaseosa familiar para compartir.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "38",
+    "nombre": "Jabon",
+    "categoria": "aseo",
+    "precio": "$3.200",
+    "stock": 59,
+    "oferta": true,
+    "descripcion": "Jabon de tocador para el cuidado diario.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "39",
+    "nombre": "Pan",
+    "categoria": "grano",
+    "precio": "$2.000",
+    "stock": 15,
+    "oferta": false,
+    "descripcion": "Pan suave para tus desayunos y onces.",
+    "disponibilidad": "disponible"
+  },
+  {
+    "id": "40",
+    "nombre": "Sal",
+    "categoria": "grano",
+    "precio": "$1.500",
+    "stock": 53,
+    "oferta": false,
+    "descripcion": "Sal de cocina para todo tipo de recetas.",
+    "disponibilidad": "disponible"
+  }
+]
